@@ -12,6 +12,7 @@ const NAV_ITEMS: { id: Page; label: string; emoji: string }[] = [
   { id: "promo", label: "Акции", emoji: "🏷️" },
   { id: "bonuses", label: "Бонусы", emoji: "⭐" },
   { id: "stores", label: "Магазины", emoji: "📍" },
+  { id: "game", label: "Игра", emoji: "🎮" },
 ];
 
 const Header = ({ page, setPage, cartCount }: Props) => {

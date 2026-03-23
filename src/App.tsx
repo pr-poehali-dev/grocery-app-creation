@@ -9,6 +9,7 @@ import PromoPage from "@/components/PromoPage";
 import DeliveryPage from "@/components/DeliveryPage";
 import BonusPage from "@/components/BonusPage";
 import StoresPage from "@/components/StoresPage";
+import GamePage from "@/components/GamePage";
 import AiAssistant from "@/components/AiAssistant";
 
 export type Page =
@@ -20,7 +21,8 @@ export type Page =
   | "promo"
   | "delivery"
   | "bonuses"
-  | "stores";
+  | "stores"
+  | "game";
 
 export type CartItem = {
   id: number;
@@ -110,13 +112,15 @@ const App = () => {
         )}
         {page === "bonuses" && <BonusPage />}
         {page === "stores" && <StoresPage />}
+        {page === "game" && <GamePage setPage={setPage} />}
         {page === "profile" && <ProfilePage setPage={setPage} />}
         {page === "promo" && <PromoPage />}
       </main>
 
+      {/* AI FAB — левый нижний угол */}
       <button
         onClick={() => setAiOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-shop-red text-white shadow-lg flex items-center justify-center hover:bg-shop-red-light transition-all duration-200 hover:scale-110 hover:shadow-xl"
+        className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-shop-red text-white shadow-lg flex items-center justify-center hover:bg-shop-red-light transition-all duration-200 hover:scale-110 hover:shadow-xl"
         title="ИИ-помощник"
       >
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
