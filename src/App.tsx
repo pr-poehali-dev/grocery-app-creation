@@ -2,13 +2,25 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import HomePage from "@/components/HomePage";
 import CatalogPage from "@/components/CatalogPage";
+import CategoriesPage from "@/components/CategoriesPage";
 import CartPage from "@/components/CartPage";
 import ProfilePage from "@/components/ProfilePage";
 import PromoPage from "@/components/PromoPage";
 import DeliveryPage from "@/components/DeliveryPage";
+import BonusPage from "@/components/BonusPage";
+import StoresPage from "@/components/StoresPage";
 import AiAssistant from "@/components/AiAssistant";
 
-export type Page = "home" | "catalog" | "cart" | "profile" | "promo" | "delivery";
+export type Page =
+  | "home"
+  | "catalog"
+  | "categories"
+  | "cart"
+  | "profile"
+  | "promo"
+  | "delivery"
+  | "bonuses"
+  | "stores";
 
 export type CartItem = {
   id: number;
@@ -37,6 +49,7 @@ const App = () => {
   const [page, setPage] = useState<Page>("home");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [aiOpen, setAiOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const addToCart = (product: Product) => {
     setCart((prev) => {
@@ -61,6 +74,11 @@ const App = () => {
     );
   };
 
+  const goToCategory = (catId: string) => {
+    setSelectedCategory(catId);
+    setPage("catalog");
+  };
+
   const cartCount = cart.reduce((s, i) => s + i.quantity, 0);
   const cartTotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
 
@@ -70,10 +88,13 @@ const App = () => {
 
       <main className="pt-[72px]">
         {page === "home" && (
-          <HomePage setPage={setPage} addToCart={addToCart} cart={cart} />
+          <HomePage setPage={setPage} addToCart={addToCart} cart={cart} goToCategory={goToCategory} />
+        )}
+        {page === "categories" && (
+          <CategoriesPage setPage={setPage} goToCategory={goToCategory} />
         )}
         {page === "catalog" && (
-          <CatalogPage addToCart={addToCart} cart={cart} />
+          <CatalogPage addToCart={addToCart} cart={cart} initialCategory={selectedCategory} />
         )}
         {page === "cart" && (
           <CartPage
@@ -87,6 +108,8 @@ const App = () => {
         {page === "delivery" && (
           <DeliveryPage setPage={setPage} cartTotal={cartTotal} />
         )}
+        {page === "bonuses" && <BonusPage />}
+        {page === "stores" && <StoresPage />}
         {page === "profile" && <ProfilePage setPage={setPage} />}
         {page === "promo" && <PromoPage />}
       </main>

@@ -8,13 +8,14 @@ type Props = {
   setPage: (p: Page) => void;
   addToCart: (p: Product) => void;
   cart: CartItem[];
+  goToCategory: (catId: string) => void;
 };
 
 const banners = [
   {
     id: 1,
     title: "Свежие овощи и фрукты",
-    subtitle: "Прямо с грядки — каждое утро",
+    subtitle: "Прямо с грядки — доставка от 40 минут",
     bg: "from-shop-green to-emerald-600",
     emoji: "🥦",
     badge: "Новинки",
@@ -37,12 +38,20 @@ const banners = [
   },
 ];
 
-const HomePage = ({ setPage, addToCart, cart }: Props) => {
+const HomePage = ({ setPage, addToCart, cart, goToCategory }: Props) => {
   const [activeBanner, setActiveBanner] = useState(0);
   const popular = PRODUCTS.filter((p) => p.popular);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-10">
+      {/* Delivery badge */}
+      <div className="flex items-center gap-2 bg-shop-green text-white px-4 py-2 rounded-2xl w-fit animate-fade-in shadow-sm">
+        <Icon name="Zap" size={16} />
+        <span className="text-sm font-bold">Доставка от 40 минут</span>
+        <span className="text-white/70 text-sm">•</span>
+        <span className="text-sm text-white/90">по Комсомольску-на-Амуре</span>
+      </div>
+
       {/* Hero Banner */}
       <section>
         <div
@@ -58,12 +67,21 @@ const HomePage = ({ setPage, addToCart, cart }: Props) => {
             <p className="text-white/80 text-sm md:text-base mb-6">
               {banners[activeBanner].subtitle}
             </p>
-            <button
-              onClick={() => setPage("catalog")}
-              className="bg-white text-shop-dark px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-100 transition-all"
-            >
-              Смотреть товары
-            </button>
+            <div className="flex gap-3 flex-wrap">
+              <button
+                onClick={() => setPage("catalog")}
+                className="bg-white text-shop-dark px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-gray-100 transition-all"
+              >
+                Смотреть товары
+              </button>
+              <button
+                onClick={() => setPage("stores")}
+                className="bg-white/20 text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-white/30 transition-all flex items-center gap-1.5"
+              >
+                <Icon name="MapPin" size={16} />
+                Выбрать магазин
+              </button>
+            </div>
           </div>
           <div className="absolute right-8 top-1/2 -translate-y-1/2 text-8xl md:text-9xl opacity-30 select-none">
             {banners[activeBanner].emoji}
@@ -85,14 +103,39 @@ const HomePage = ({ setPage, addToCart, cart }: Props) => {
         </div>
       </section>
 
+      {/* Stats */}
+      <section className="grid grid-cols-4 gap-3">
+        {[
+          { value: "40 мин", label: "доставка", color: "text-shop-green", emoji: "⚡" },
+          { value: "2 000+", label: "товаров", color: "text-shop-red", emoji: "📦" },
+          { value: "4", label: "магазина", color: "text-shop-dark", emoji: "🏪" },
+          { value: "15 мин", label: "сборка", color: "text-shop-red", emoji: "🛒" },
+        ].map((s) => (
+          <div key={s.label} className="bg-white rounded-2xl p-4 text-center border border-gray-100">
+            <div className="text-lg mb-0.5">{s.emoji}</div>
+            <div className={`text-base font-bold ${s.color}`}>{s.value}</div>
+            <div className="text-xs text-gray-500 mt-0.5">{s.label}</div>
+          </div>
+        ))}
+      </section>
+
       {/* Category shortcuts */}
       <section>
-        <h2 className="text-xl font-bold text-shop-dark mb-4">Категории</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-shop-dark">Категории</h2>
+          <button
+            onClick={() => setPage("categories")}
+            className="flex items-center gap-1 text-sm text-shop-red font-medium hover:gap-2 transition-all"
+          >
+            Все категории
+            <Icon name="ArrowRight" size={16} />
+          </button>
+        </div>
         <div className="grid grid-cols-4 sm:grid-cols-7 gap-3">
           {CATEGORIES.slice(1).map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setPage("catalog")}
+              onClick={() => goToCategory(cat.id)}
               className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-white border border-gray-100 hover:border-shop-red hover:shadow-md transition-all group"
             >
               <span className="text-2xl group-hover:scale-110 transition-transform">
@@ -104,20 +147,6 @@ const HomePage = ({ setPage, addToCart, cart }: Props) => {
             </button>
           ))}
         </div>
-      </section>
-
-      {/* Stats */}
-      <section className="grid grid-cols-3 gap-4">
-        {[
-          { value: "2 000+", label: "товаров", color: "text-shop-red" },
-          { value: "Сегодня", label: "доставим", color: "text-shop-green" },
-          { value: "15 мин", label: "сборка", color: "text-shop-red" },
-        ].map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl p-4 text-center border border-gray-100">
-            <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-xs text-gray-500 mt-1">{s.label}</div>
-          </div>
-        ))}
       </section>
 
       {/* Popular products */}
@@ -145,23 +174,33 @@ const HomePage = ({ setPage, addToCart, cart }: Props) => {
         </div>
       </section>
 
-      {/* Promo banner */}
-      <section
-        className="rounded-3xl bg-shop-red-soft border border-red-100 p-6 flex items-center justify-between cursor-pointer hover:shadow-md transition-all"
-        onClick={() => setPage("promo")}
-      >
-        <div>
-          <div className="text-xs font-semibold text-shop-red mb-1 uppercase tracking-wider">
-            Промокод
+      {/* Bonus banner */}
+      <section className="grid sm:grid-cols-2 gap-4">
+        <div
+          className="rounded-3xl bg-gradient-to-br from-shop-dark to-gray-800 text-white p-6 flex items-center justify-between cursor-pointer hover:shadow-lg transition-all"
+          onClick={() => setPage("bonuses")}
+        >
+          <div>
+            <div className="text-xs font-semibold text-white/60 mb-1 uppercase tracking-wider">Бонусная карта</div>
+            <div className="text-lg font-bold">840 бонусов</div>
+            <div className="text-sm text-white/60 mt-1">5% кэшбэк с каждого заказа</div>
           </div>
-          <div className="text-lg font-bold text-shop-dark">
-            Получи скидку 10%
-          </div>
-          <div className="text-sm text-gray-500 mt-1">
-            на первый заказ: <span className="font-bold text-shop-red">FRESH10</span>
-          </div>
+          <div className="text-4xl">⭐</div>
         </div>
-        <div className="text-5xl">🎁</div>
+
+        <div
+          className="rounded-3xl bg-shop-red-soft border border-red-100 p-6 flex items-center justify-between cursor-pointer hover:shadow-md transition-all"
+          onClick={() => setPage("promo")}
+        >
+          <div>
+            <div className="text-xs font-semibold text-shop-red mb-1 uppercase tracking-wider">Промокод</div>
+            <div className="text-lg font-bold text-shop-dark">Скидка 10%</div>
+            <div className="text-sm text-gray-500 mt-1">
+              на первый заказ: <span className="font-bold text-shop-red">KNK10</span>
+            </div>
+          </div>
+          <div className="text-4xl">🎁</div>
+        </div>
       </section>
     </div>
   );

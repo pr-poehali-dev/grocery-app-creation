@@ -2,7 +2,7 @@ import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
 const PROMOS = [
-  { id: 1, code: "FRESH10", discount: "10%", desc: "На первый заказ", expires: "31 марта", minOrder: 500, used: false },
+  { id: 1, code: "KNK10", discount: "10%", desc: "На первый заказ", expires: "31 марта", minOrder: 500, used: false },
   { id: 2, code: "VEGGIE20", discount: "20%", desc: "На овощи и фрукты", expires: "25 марта", minOrder: 800, used: false },
   { id: 3, code: "DAIRY15", discount: "15%", desc: "На молочную продукцию", expires: "28 марта", minOrder: 600, used: true },
   { id: 4, code: "SPRING30", discount: "30%", desc: "Весенняя распродажа", expires: "1 апреля", minOrder: 1500, used: false },

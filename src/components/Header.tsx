@@ -1,6 +1,5 @@
 import { Page } from "@/App";
 import Icon from "@/components/ui/icon";
-import { CATEGORIES } from "@/data/products";
 
 type Props = {
   page: Page;
@@ -8,7 +7,12 @@ type Props = {
   cartCount: number;
 };
 
-const navCategories = CATEGORIES.slice(1, 7);
+const NAV_ITEMS: { id: Page; label: string; emoji: string }[] = [
+  { id: "categories", label: "Каталог", emoji: "📦" },
+  { id: "promo", label: "Акции", emoji: "🏷️" },
+  { id: "bonuses", label: "Бонусы", emoji: "⭐" },
+  { id: "stores", label: "Магазины", emoji: "📍" },
+];
 
 const Header = ({ page, setPage, cartCount }: Props) => {
   return (
@@ -24,29 +28,26 @@ const Header = ({ page, setPage, cartCount }: Props) => {
               <span className="text-white text-lg">🥬</span>
             </div>
             <span className="font-bold text-lg text-shop-dark tracking-tight hidden sm:block">
-              Фреш<span className="text-shop-red">Маркет</span>
+              knk<span className="text-shop-red">amur</span>
             </span>
           </button>
 
-          {/* Category tabs */}
+          {/* Nav */}
           <nav className="flex items-center gap-1 overflow-x-auto scrollbar-hide flex-1 justify-center">
-            {navCategories.map((cat) => (
+            {NAV_ITEMS.map((item) => (
               <button
-                key={cat.id}
-                onClick={() => setPage("catalog")}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-500 hover:text-shop-red hover:bg-shop-red-soft transition-all whitespace-nowrap"
+                key={item.id}
+                onClick={() => setPage(item.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+                  page === item.id
+                    ? "bg-shop-red text-white"
+                    : "text-gray-500 hover:text-shop-red hover:bg-shop-red-soft"
+                }`}
               >
-                <span>{cat.emoji}</span>
-                <span className="hidden md:inline">{cat.label}</span>
+                <span>{item.emoji}</span>
+                <span className="hidden md:inline">{item.label}</span>
               </button>
             ))}
-            <button
-              onClick={() => setPage("promo")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-shop-red bg-shop-red-soft hover:bg-red-100 transition-all whitespace-nowrap"
-            >
-              <span>🏷️</span>
-              <span className="hidden md:inline">Акции</span>
-            </button>
           </nav>
 
           {/* Right buttons */}

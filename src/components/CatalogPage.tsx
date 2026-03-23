@@ -7,10 +7,11 @@ import Icon from "@/components/ui/icon";
 type Props = {
   addToCart: (p: Product) => void;
   cart: CartItem[];
+  initialCategory?: string | null;
 };
 
-const CatalogPage = ({ addToCart, cart }: Props) => {
-  const [activeCategory, setActiveCategory] = useState("all");
+const CatalogPage = ({ addToCart, cart, initialCategory }: Props) => {
+  const [activeCategory, setActiveCategory] = useState(initialCategory || "all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"default" | "price_asc" | "price_desc" | "discount">("default");
 
