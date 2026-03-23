@@ -5,9 +5,10 @@ import CatalogPage from "@/components/CatalogPage";
 import CartPage from "@/components/CartPage";
 import ProfilePage from "@/components/ProfilePage";
 import PromoPage from "@/components/PromoPage";
+import DeliveryPage from "@/components/DeliveryPage";
 import AiAssistant from "@/components/AiAssistant";
 
-export type Page = "home" | "catalog" | "cart" | "profile" | "promo";
+export type Page = "home" | "catalog" | "cart" | "profile" | "promo" | "delivery";
 
 export type CartItem = {
   id: number;
@@ -82,6 +83,9 @@ const App = () => {
             cartTotal={cartTotal}
             setPage={setPage}
           />
+        )}
+        {page === "delivery" && (
+          <DeliveryPage setPage={setPage} cartTotal={cartTotal} />
         )}
         {page === "profile" && <ProfilePage setPage={setPage} />}
         {page === "promo" && <PromoPage />}
